@@ -1,0 +1,24 @@
+name: Build Windows EXE
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install PyInstaller
+        run: pip install pyinstaller
+
+      - name: Build EXE with icon
+        run: pyinstaller --onefile --windowed --icon=icon.ico --name FileOrganizer --hidden-import tkinter file-organizer.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FileOrganizer-exe
+          path: dist/FileOrganizer.exe
